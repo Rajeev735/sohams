@@ -58,9 +58,25 @@ function ProductList() {
   };
   
 
-  const handleAddToWishlist = (product) => {
-    console.log("Add to Wishlist clicked:", product);
-    // Add API call or wishlist logic here
+ const handleAddToWishlist = async (product) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:7000/api/auth/wishlist",
+        { productId: product._id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+  
+      if (response.data.success) {
+        console.log("Added to wishlist successfully:", response.data);
+        // Optionally show toast / update UI
+      }
+    } catch (error) {
+      console.error("Error adding to wishlist:", error.response?.data || error.message);
+    }
   };
 
   return (
